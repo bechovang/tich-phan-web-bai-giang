@@ -69,7 +69,6 @@
                 <h2 class="text-xl font-semibold text-gray-700 mb-4">Video tham khảo</h2>
                 <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@mot_chut_toan/video/7497496142406618389" data-video-id="7497496142406618389" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@mot_chut_toan" href="https://www.tiktok.com/@mot_chut_toan?refer=embed">@mot_chut_toan</a> Bản chất của ứng dụng tích phân - Xem 1 cờ líp - Hiểu hết 1 chương <a title="toán12" target="_blank" href="https://www.tiktok.com/tag/to%C3%A1n12?refer=embed">#toán12</a> <a title="ungdungtichphan" target="_blank" href="https://www.tiktok.com/tag/ungdungtichphan?refer=embed">#ungdungtichphan</a> <a title="banchatungdungtichphan" target="_blank" href="https://www.tiktok.com/tag/banchatungdungtichphan?refer=embed">#banchatungdungtichphan</a> <a title="onthidaihoc" target="_blank" href="https://www.tiktok.com/tag/onthidaihoc?refer=embed">#onthidaihoc</a> <a target="_blank" title="♬ nhạc nền  - Toanthaytin" href="https://www.tiktok.com/music/nhạc-nền-Toanthaytin-7497496600147708688?refer=embed">♬ nhạc nền  - Toanthaytin</a> </section> </blockquote> <script async src="https://www.tiktok.com/embed.js"></script>
                 
-                <!-- Hardcoded Buttons -->
                 <div class="flex space-x-4 mt-4">
                     <a href="https://mae-exam-web.netlify.app/practice/6" target="_blank" class="flex-1 text-center bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
                         BT Tương ứng
@@ -186,10 +185,12 @@
                         const fullExpression = `(${f_u2}) * (${u2_prime_t}) - (${f_u1}) * (${u1_prime_t})`;
 
                         const displayTex = (str) => `$$${str.replace(/\*/g, ' \\cdot ')}$$`;
+                        
+                        // **FIXED LATEX RENDERING HERE**
                         let html = `
                             <div class="step"><h4 class="font-semibold">1. Xác định đạo hàm bằng AI:</h4>
-                                <p class="ml-4">$u'_2(t) = \\frac{d}{dt}(${u2_t}) = <strong class="text-blue-600">${u2_prime_t}</strong>$</p>
-                                <p class="ml-4">$u'_1(t) = \\frac{d}{dt}(${u1_t}) = <strong class="text-blue-600">${u1_prime_t}</strong>$</p>
+                                <p class="ml-4">$u'_2(t) = \\frac{d}{dt}(${u2_t}) = $ <strong class="text-blue-600">$${u2_prime_t}$</strong></p>
+                                <p class="ml-4">$u'_1(t) = \\frac{d}{dt}(${u1_t}) = $ <strong class="text-blue-600">$${u1_prime_t}$</strong></p>
                             </div>
                             <div class="step"><h4 class="font-semibold">2. Thay vào công thức Leibniz:</h4>
                                 ${displayTex(fullExpression)}
@@ -203,24 +204,22 @@
                         const simplificationPrompt = `Simplify the following mathematical expression as much as possible: ${fullExpression}. Provide only the final, simplified expression. Do not add any extra text or formatting.`;
                         const simplifiedResult = await callAI(simplificationPrompt);
                         
-                        if (simplifiedResult.startsWith('Error:')) {
-                             html += `<p class="text-red-500 font-bold">Lỗi khi rút gọn:</p><p class="text-red-700 text-sm mt-2">${simplifiedResult}</p>`;
-                        } else {
-                            html = `
-                                <div class="step"><h4 class="font-semibold">1. Xác định đạo hàm bằng AI:</h4>
-                                    <p class="ml-4">$u'_2(t) = \\frac{d}{dt}(${u2_t}) = <strong class="text-blue-600">${u2_prime_t}</strong>$</p>
-                                    <p class="ml-4">$u'_1(t) = \\frac{d}{dt}(${u1_t}) = <strong class="text-blue-600">${u1_prime_t}</strong>$</p>
+                        // **FIXED LATEX RENDERING HERE**
+                        const finalHtml = `
+                            <div class="step"><h4 class="font-semibold">1. Xác định đạo hàm bằng AI:</h4>
+                                <p class="ml-4">$u'_2(t) = \\frac{d}{dt}(${u2_t}) = $ <strong class="text-blue-600">$${u2_prime_t}$</strong></p>
+                                <p class="ml-4">$u'_1(t) = \\frac{d}{dt}(${u1_t}) = $ <strong class="text-blue-600">$${u1_prime_t}$</strong></p>
+                            </div>
+                            <div class="step"><h4 class="font-semibold">2. Thay vào công thức Leibniz:</h4>
+                                ${displayTex(fullExpression)}
+                            </div>
+                            <div class="step border-t mt-4 pt-4"><h4 class="font-semibold">3. Kết quả sau khi rút gọn bởi AI:</h4>
+                                <div class="p-3 bg-green-100 border-l-4 border-green-500 rounded-r-lg mt-2">
+                                    ${simplifiedResult.startsWith('Error:') ? `<p class="text-red-500 font-bold">Lỗi khi rút gọn:</p><p class="text-red-700 text-sm mt-2">${simplifiedResult}</p>` : displayTex(simplifiedResult)}
                                 </div>
-                                <div class="step"><h4 class="font-semibold">2. Thay vào công thức Leibniz:</h4>
-                                    ${displayTex(fullExpression)}
-                                </div>
-                                <div class="step border-t mt-4 pt-4"><h4 class="font-semibold">3. Kết quả sau khi rút gọn bởi AI:</h4>
-                                    <div class="p-3 bg-green-100 border-l-4 border-green-500 rounded-r-lg mt-2">
-                                        ${displayTex(simplifiedResult)}
-                                    </div>
-                                </div>`;
-                        }
-                        outputDiv.innerHTML = html;
+                            </div>`;
+                        
+                        outputDiv.innerHTML = finalHtml;
                         MathJax.typesetPromise([outputDiv]);
                     }
                 }
