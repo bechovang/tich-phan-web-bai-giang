@@ -30,51 +30,20 @@
 
     <!-- Custom Styles -->
     <style>
-        /* Custom scrollbar for webkit browsers */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        /* Define custom block styles */
-        .slide-block {
-            @apply p-4 border-l-4 mb-6 rounded-r-lg;
-        }
-        .block-info {
-            @apply slide-block bg-blue-50 border-blue-400;
-        }
-        .block-example {
-            @apply slide-block bg-green-50 border-green-500;
-        }
-        .block-alert {
-            @apply slide-block bg-yellow-50 border-yellow-500;
-        }
+        .slide-block { @apply p-4 border-l-4 mb-6 rounded-r-lg shadow-sm; }
+        .block-info { @apply slide-block bg-blue-50 border-blue-400; }
+        .block-example { @apply slide-block bg-green-50 border-green-500; }
+        .block-alert { @apply slide-block bg-yellow-50 border-yellow-500; }
 
-        /* Responsive iframe */
-        .responsive-iframe-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-        }
-        .responsive-iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-        }
+        .responsive-iframe-container { position: relative; overflow: hidden; width: 100%; padding-top: 56.25%; }
+        .responsive-iframe { position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; }
+        
+        .tiktok-embed { margin: 0 auto; }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -82,14 +51,14 @@
     <div class="flex flex-col md:flex-row h-screen">
 
         <!-- Left Column: Lecture & Materials -->
-        <div id="left-column" class="md:w-1/2 h-screen overflow-y-auto p-8 bg-white custom-scrollbar">
+        <div id="left-column" class="md:w-1/2 h-screen overflow-y-auto p-6 md:p-8 bg-white custom-scrollbar">
             <h1 class="text-3xl font-bold text-gray-800 mb-6">Bài giảng: Đạo hàm của Tích phân theo Cận số</h1>
 
             <!-- Supplementary Materials -->
             <div class="mb-8 border rounded-lg p-4 shadow-md">
                 <h2 class="text-xl font-semibold text-gray-700 mb-4">Tài liệu bổ trợ</h2>
-                <div class="responsive-iframe-container mb-4 rounded-lg overflow-hidden">
-                    <iframe id="youtube-video" class="responsive-iframe" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <div id="video-embed-container" class="mb-4 rounded-lg overflow-hidden bg-gray-200 min-h-[325px] flex items-center justify-center">
+                    <!-- Video content (embed or iframe) is inserted here by JavaScript -->
                 </div>
                 <div class="flex space-x-4">
                     <a id="theory-link" href="#" target="_blank" class="flex-1 text-center bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
@@ -103,181 +72,74 @@
 
             <!-- Lecture Content -->
             <div>
-                <h2 class="text-xl font-semibold text-gray-700 mb-4">Nội dung Bài giảng</h2>
-
-                <div class="slide-block block-info">
-                    <h3 class="font-bold text-lg mb-2 text-blue-800">Mục tiêu bài học</h3>
-                    <p>Hôm nay, chúng ta sẽ khám phá cách tính đạo hàm của một tích phân có cận là các hàm số. Mục tiêu là hiểu rõ công thức và logic đằng sau nó, vốn là sự kết hợp của hai nguyên lý cơ bản trong giải tích.</p>
-                </div>
-
-                <div class="slide-block block-info">
-                    <h3 class="font-bold text-lg mb-2 text-blue-800">Nền tảng lý thuyết</h3>
-                    <p>Phương pháp này được xây dựng dựa trên hai trụ cột chính:</p>
-                    <ul class="list-disc list-inside mt-2">
-                        <li><b>Công thức Newton-Leibniz:</b> Liên hệ giữa tích phân xác định và nguyên hàm. $$ \int_a^b f(x)dx = F(b) - F(a) $$</li>
-                        <li><b>Quy tắc chuỗi (Chain Rule):</b> Dùng để tính đạo hàm của hàm hợp. $$ \frac{d}{dt} f(g(t)) = f'(g(t)) \cdot g'(t) $$</li>
-                    </ul>
-                </div>
-
-                <div class="slide-block block-alert">
-                    <h3 class="font-bold text-lg mb-2 text-yellow-800">Công thức chính (Định lý Leibniz)</h3>
-                    <p>Giả sử ta có tích phân $Y(t) = \int_{u_1(t)}^{u_2(t)} f(x) dx$.</p>
-                    <p>Với điều kiện $f(x)$ liên tục và các hàm cận $u_1(t), u_2(t)$ khả vi, đạo hàm của $Y$ theo $t$ được tính như sau:</p>
-                    <div class="bg-gray-100 p-3 mt-2 rounded">
-                        $$ \frac{dY}{dt} = f(u_2(t)) \cdot u'_2(t) - f(u_1(t)) \cdot u'_1(t) $$
-                    </div>
-                     <p class="mt-2">Công thức này ghi nhận sự thay đổi của hàm $f$ ở hai đầu mút, và cả sự thay đổi do chính hai đầu mút đó di chuyển.</p>
-                </div>
-
-                <div class="slide-block block-example">
-                    <h3 class="font-bold text-lg mb-2 text-green-800">Ví dụ minh họa</h3>
-                    <p>Tính đạo hàm theo $t$ của tích phân: $ Y(t) = \int_{t^2}^{\sin(t)} \frac{1}{1+x^4} dx $</p>
-                    <ol class="list-decimal list-inside mt-2 space-y-2">
-                        <li><b>Xác định các thành phần:</b>
-                            <ul class="list-disc list-inside ml-6 bg-green-100 p-2 rounded">
-                                <li>$ f(x) = \frac{1}{1+x^4} $</li>
-                                <li>Cận trên: $ u_2(t) = \sin(t) \implies u'_2(t) = \cos(t) $</li>
-                                <li>Cận dưới: $ u_1(t) = t^2 \implies u'_1(t) = 2t $</li>
-                            </ul>
-                        </li>
-                        <li><b>Áp dụng công thức:</b>
-                            <p>$$ Y'(t) = f(u_2(t)) \cdot u'_2(t) - f(u_1(t)) \cdot u'_1(t) $$</p>
-                            <p>$$ Y'(t) = \underbrace{\frac{1}{1+(\sin t)^4}}_{f(u_2(t))} \cdot \underbrace{\cos(t)}_{u'_2(t)} - \underbrace{\frac{1}{1+(t^2)^4}}_{f(u_1(t))} \cdot \underbrace{2t}_{u'_1(t)} $$</p>
-                        </li>
-                         <li><b>Kết quả cuối cùng:</b>
-                            <p>$$ Y'(t) = \frac{\cos(t)}{1+\sin^4(t)} - \frac{2t}{1+t^8} $$</p>
-                        </li>
-                    </ol>
-                </div>
-                
-                <div class="slide-block block-example">
-                    <h3 class="font-bold text-lg mb-2 text-green-800">Trường hợp đặc biệt: Một cận là hằng số</h3>
-                    <p>Khi một trong hai cận là hằng số, đạo hàm của nó sẽ bằng 0, làm cho một vế của công thức bị triệt tiêu.</p>
-                    <p>Ví dụ: $ Y(t) = \int_{0}^{e^t} \sqrt{1+x^2} dx $</p>
-                     <ul class="list-disc list-inside mt-2 bg-green-100 p-2 rounded">
-                        <li>$f(x) = \sqrt{1+x^2}$</li>
-                        <li>Cận trên: $ u_2(t) = e^t \implies u'_2(t) = e^t $</li>
-                        <li>Cận dưới: $ u_1(t) = 0 \implies u'_1(t) = 0 $</li>
-                    </ul>
-                    <p class="mt-2">Khi đó, đạo hàm chỉ còn là: </p>
-                    <p>$$ Y'(t) = f(e^t) \cdot (e^t)' - 0 = \sqrt{1+(e^t)^2} \cdot e^t = e^t\sqrt{1+e^{2t}} $$</p>
-                </div>
-
-                <div class="slide-block block-alert">
-                    <h3 class="font-bold text-lg mb-2 text-yellow-800">Điểm mấu chốt cần nhớ</h3>
-                    <p>Điều quan trọng không chỉ là nhớ công thức, mà là hiểu bản chất của nó: sự kết hợp giữa <b>Định lý Newton-Leibniz</b> và <b>Quy tắc chuỗi</b> để xử lý các giới hạn động.</p>
-                    <p class="mt-2">Luôn kiểm tra các điều kiện cần: $f(x)$ phải liên tục và các hàm cận $u_1, u_2$ phải khả vi.</p>
-                </div>
-                
-                 <div class="slide-block block-info">
-                    <h3 class="font-bold text-lg mb-2 text-blue-800">Câu hỏi mở rộng</h3>
-                    <p>Công thức này sẽ thay đổi như thế nào nếu bản thân hàm dưới dấu tích phân cũng phụ thuộc vào biến $t$? Tức là, làm sao để tính đạo hàm của $ \int_{u_1(t)}^{u_2(t)} f(x, t) dx $?</p>
-                    <p class="mt-1 text-sm italic">Đây là một hướng thú vị để tìm hiểu sâu hơn về quy tắc Leibniz tổng quát.</p>
-                </div>
-
+                <h2 class="text-2xl font-bold text-gray-700 mb-4 border-b pb-2">Nội dung Bài giảng</h2>
+                <div class="slide-block block-info"><h3 class="font-bold text-lg mb-2 text-blue-800">Mục tiêu bài học</h3><p>Hôm nay, chúng ta sẽ khám phá cách tính đạo hàm của một tích phân có cận là các hàm số. Mục tiêu là hiểu rõ công thức và logic đằng sau nó, vốn là sự kết hợp của hai nguyên lý cơ bản trong giải tích.</p></div>
+                <div class="slide-block block-info"><h3 class="font-bold text-lg mb-2 text-blue-800">Nền tảng lý thuyết</h3><p>Phương pháp này được xây dựng dựa trên hai trụ cột chính:</p><ul class="list-disc list-inside mt-2 space-y-1"><li><b>Công thức Newton-Leibniz:</b> Liên hệ giữa tích phân xác định và nguyên hàm. $$ \int_a^b f(x)dx = F(b) - F(a) $$</li><li><b>Quy tắc chuỗi (Chain Rule):</b> Dùng để tính đạo hàm của hàm hợp. $$ \frac{d}{dt} f(g(t)) = f'(g(t)) \cdot g'(t) $$</li></ul></div>
+                <div class="slide-block block-alert"><h3 class="font-bold text-lg mb-2 text-yellow-800">Công thức chính (Định lý Leibniz)</h3><p>Giả sử ta có tích phân $Y(t) = \int_{u_1(t)}^{u_2(t)} f(x) dx$.</p><p>Với điều kiện $f(x)$ liên tục và các hàm cận $u_1(t), u_2(t)$ khả vi, đạo hàm của $Y$ theo $t$ được tính như sau:</p><div class="bg-gray-100 p-3 mt-2 rounded">$$ \frac{dY}{dt} = f(u_2(t)) \cdot u'_2(t) - f(u_1(t)) \cdot u'_1(t) $$</div><p class="mt-2">Công thức này ghi nhận sự thay đổi của hàm $f$ ở hai đầu mút, và cả sự thay đổi do chính hai đầu mút đó di chuyển.</p></div>
+                <div class="slide-block block-example"><h3 class="font-bold text-lg mb-2 text-green-800">Ví dụ minh họa</h3><p>Tính đạo hàm theo $t$ của tích phân: $ Y(t) = \int_{t^2}^{\sin(t)} \frac{1}{1+x^4} dx $</p><ol class="list-decimal list-inside mt-2 space-y-2"><li><b>Xác định các thành phần:</b><ul class="list-disc list-inside ml-6 bg-green-100 p-2 rounded"><li>$ f(x) = \frac{1}{1+x^4} $</li><li>Cận trên: $ u_2(t) = \sin(t) \implies u'_2(t) = \cos(t) $</li><li>Cận dưới: $ u_1(t) = t^2 \implies u'_1(t) = 2t $</li></ul></li><li><b>Áp dụng công thức:</b><p>$$ Y'(t) = \underbrace{f(u_2(t)) \cdot u'_2(t)}_{\text{Vế 1}} - \underbrace{f(u_1(t)) \cdot u'_1(t)}_{\text{Vế 2}} $$</p><p>$$ Y'(t) = \underbrace{\left(\frac{1}{1+(\sin t)^4}\right) \cdot (\cos t)}_{\text{Thay vào Vế 1}} - \underbrace{\left(\frac{1}{1+(t^2)^4}\right) \cdot (2t)}_{\text{Thay vào Vế 2}} $$</p></li><li><b>Kết quả cuối cùng:</b><p>$$ Y'(t) = \frac{\cos(t)}{1+\sin^4(t)} - \frac{2t}{1+t^8} $$</p></li></ol></div>
+                <div class="slide-block block-example"><h3 class="font-bold text-lg mb-2 text-green-800">Trường hợp đặc biệt: Một cận là hằng số</h3><p>Khi một trong hai cận là hằng số (ví dụ $u_1(t) = a$), đạo hàm của nó sẽ bằng 0 ($u'_1(t) = 0$), làm cho một vế của công thức bị triệt tiêu.</p><p>Ví dụ: $ Y(t) = \int_{0}^{e^t} \sqrt{1+x^2} dx $</p><p class="mt-2">Ở đây, $u_1(t)=0 \implies u'_1(t)=0$. Vế thứ hai của công thức bằng 0. Ta chỉ cần tính:</p><p>$$ Y'(t) = f(u_2(t)) \cdot u'_2(t) = f(e^t) \cdot (e^t)' = \sqrt{1+(e^t)^2} \cdot e^t = e^t\sqrt{1+e^{2t}} $$</p></div>
+                <div class="slide-block block-alert"><h3 class="font-bold text-lg mb-2 text-yellow-800">Điểm mấu chốt cần nhớ</h3><p>Điều quan trọng không chỉ là nhớ công thức, mà là hiểu bản chất của nó: sự kết hợp giữa <b>Định lý Newton-Leibniz</b> và <b>Quy tắc chuỗi</b> để xử lý các giới hạn động.</p><p class="mt-2">Luôn kiểm tra các điều kiện cần: $f(x)$ phải liên tục và các hàm cận $u_1, u_2$ phải khả vi.</p></div>
+                <div class="slide-block block-info"><h3 class="font-bold text-lg mb-2 text-blue-800">Câu hỏi mở rộng</h3><p>Công thức này sẽ thay đổi như thế nào nếu bản thân hàm dưới dấu tích phân cũng phụ thuộc vào biến $t$? Tức là, làm sao để tính đạo hàm của $ \int_{u_1(t)}^{u_2(t)} f(x, t) dx $?</p><p class="mt-1 text-sm italic">Đây là một hướng thú vị để tìm hiểu sâu hơn về quy tắc Leibniz tổng quát.</p></div>
             </div>
         </div>
 
         <!-- Right Column: Interactive & Audio -->
-        <div id="right-column" class="md:w-1/2 h-screen overflow-y-auto p-8 bg-gray-200 custom-scrollbar">
-            
-            <!-- Audio Player -->
-            <div class="bg-white p-4 rounded-lg shadow-md sticky top-0 z-10">
-                <h2 class="text-xl font-semibold text-gray-700 mb-3">Âm thanh Bài giảng</h2>
-                <audio id="audio-player" controls class="w-full">
-                    <source src="audio.wav" type="audio/wav">
-                    Your browser does not support the audio element.
-                </audio>
-                <div class="mt-3">
-                    <label for="audio-upload" class="text-sm font-medium text-gray-600">Hoặc tải lên tệp âm thanh khác:</label>
-                    <input type="file" id="audio-upload" accept="audio/*" class="mt-1 block w-full text-sm text-gray-500
-                        file:mr-4 file:py-2 file:px-4
-                        file:rounded-full file:border-0
-                        file:text-sm file:font-semibold
-                        file:bg-blue-50 file:text-blue-700
-                        hover:file:bg-blue-100
-                    "/>
-                </div>
-            </div>
-
-            <!-- Interactive Application -->
-            <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold text-gray-700 mb-4">Công cụ Tương tác: Tính đạo hàm tích phân</h2>
-                <p class="text-sm text-gray-600 mb-6">Nhập các hàm số tương ứng vào các ô dưới đây để xem các bước tính đạo hàm theo công thức Leibniz.</p>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label for="func-f" class="block text-sm font-medium text-gray-700">Hàm $f(x)$</label>
-                        <input type="text" id="func-f" value="1 / (1 + x^4)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="func-u2" class="block text-sm font-medium text-gray-700">Cận trên $u_2(t)$</label>
-                            <input type="text" id="func-u2" value="sin(t)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        <div>
-                             <label for="func-u2-prime" class="block text-sm font-medium text-gray-700">Đạo hàm $u'_2(t)$</label>
-                            <input type="text" id="func-u2-prime" value="cos(t)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                    </div>
-
-                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="func-u1" class="block text-sm font-medium text-gray-700">Cận dưới $u_1(t)$</label>
-                            <input type="text" id="func-u1" value="t^2" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        <div>
-                             <label for="func-u1-prime" class="block text-sm font-medium text-gray-700">Đạo hàm $u'_1(t)$</label>
-                            <input type="text" id="func-u1-prime" value="2t" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                    </div>
-                </div>
-
-                <button id="calculate-btn" class="mt-6 w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Tính đạo hàm
-                </button>
-
-                <div id="output-area" class="mt-6 border-t pt-6">
-                    <h3 class="text-lg font-semibold text-gray-700">Kết quả:</h3>
-                    <div id="calculation-steps" class="mt-2 p-4 bg-gray-50 rounded-lg text-gray-800 space-y-4">
-                        <p class="text-gray-500 italic">Nhấn nút "Tính đạo hàm" để xem kết quả.</p>
-                    </div>
-                </div>
-            </div>
-
+        <div id="right-column" class="md:w-1/2 h-screen overflow-y-auto p-6 md:p-8 bg-gray-200 custom-scrollbar">
+            <div class="bg-white p-4 rounded-lg shadow-md sticky top-0 z-10"><h2 class="text-xl font-semibold text-gray-700 mb-3">Âm thanh Bài giảng</h2><audio id="audio-player" controls class="w-full"><source src="audio.wav" type="audio/wav">Trình duyệt của bạn không hỗ trợ file âm thanh.</audio><div class="mt-3"><label for="audio-upload" class="text-sm font-medium text-gray-600">Hoặc tải lên tệp âm thanh khác:</label><input type="file" id="audio-upload" accept="audio/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/></div></div>
+            <div class="mt-8 bg-white p-6 rounded-lg shadow-md"><h2 class="text-xl font-semibold text-gray-700 mb-4">Công cụ Tương tác: Tính đạo hàm tích phân</h2><p class="text-sm text-gray-600 mb-6">Nhập các hàm số tương ứng vào các ô dưới đây để xem các bước tính đạo hàm theo công thức Leibniz.</p><div class="space-y-4"><div><label for="func-f" class="block text-sm font-medium text-gray-700">Hàm $f(x)$</label><input type="text" id="func-f" value="1 / (1 + x^4)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="func-u2" class="block text-sm font-medium text-gray-700">Cận trên $u_2(t)$</label><input type="text" id="func-u2" value="sin(t)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div><div><label for="func-u2-prime" class="block text-sm font-medium text-gray-700">Đạo hàm $u'_2(t)$</label><input type="text" id="func-u2-prime" value="cos(t)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="func-u1" class="block text-sm font-medium text-gray-700">Cận dưới $u_1(t)$</label><input type="text" id="func-u1" value="t^2" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div><div><label for="func-u1-prime" class="block text-sm font-medium text-gray-700">Đạo hàm $u'_1(t)$</label><input type="text" id="func-u1-prime" value="2*t" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div></div></div><button id="calculate-btn" class="mt-6 w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Tính đạo hàm</button><div id="output-area" class="mt-6 border-t pt-6"><h3 class="text-lg font-semibold text-gray-700">Kết quả:</h3><div id="calculation-steps" class="mt-2 p-4 bg-gray-50 rounded-lg text-gray-800 space-y-4"><p class="text-gray-500 italic">Nhấn nút "Tính đạo hàm" để xem kết quả.</p></div></div></div>
         </div>
-
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- 1. Load external links ---
-            const loadLinks = async () => {
+            // --- 1. Load external links and video embed ---
+            const loadContent = async () => {
+                const videoContainer = document.getElementById('video-embed-container');
                 try {
                     const response = await fetch('link.json');
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     const data = await response.json();
                     
-                    document.getElementById('youtube-video').src = data.youtubeLink || '';
                     document.getElementById('theory-link').href = data.theoryLink || '#';
                     document.getElementById('exercise-link').href = data.exerciseLink || '#';
 
+                    // Priority 1: Use raw embed HTML if it exists and is not empty.
+                    if (data.embedHtml && data.embedHtml.trim() !== '') {
+                        videoContainer.innerHTML = data.embedHtml;
+                        videoContainer.style.background = 'none';
+                        videoContainer.style.padding = '0';
+                        // The script for the embed (like TikTok's) will be part of the HTML and should load itself.
+                    } 
+                    // Priority 2: Fallback to YouTube link.
+                    else if (data.youtubeLink) {
+                        videoContainer.innerHTML = ''; // Clear fallback content
+                        videoContainer.classList.add('responsive-iframe-container');
+                        
+                        const iframe = document.createElement('iframe');
+                        iframe.className = 'responsive-iframe';
+                        iframe.src = data.youtubeLink;
+                        iframe.title = 'YouTube video player';
+                        iframe.frameBorder = '0';
+                        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                        iframe.allowFullscreen = true;
+                        
+                        videoContainer.appendChild(iframe);
+                    } 
+                    // Priority 3: Show error if no video source is provided.
+                    else {
+                        videoContainer.innerHTML = '<p class="text-red-500">Không có video được cung cấp trong link.json.</p>';
+                    }
+
                 } catch (error) {
-                    console.error("Could not load links from link.json:", error);
-                    // Provide fallback or display an error message
-                     document.getElementById('youtube-video').parentElement.innerHTML = '<p class="text-red-500 text-center">Không thể tải video. Vui lòng kiểm tra tệp link.json.</p>';
+                    console.error("Could not load content from link.json:", error);
+                    videoContainer.innerHTML = '<p class="text-red-500 text-center">Không thể tải tệp <strong>link.json</strong>. Vui lòng kiểm tra lại.</p>';
                 }
             };
-            loadLinks();
-
+            loadContent();
 
             // --- 2. Audio Player Logic ---
             const audioPlayer = document.getElementById('audio-player');
             const audioUpload = document.getElementById('audio-upload');
-
             audioUpload.addEventListener('change', (event) => {
                 const file = event.target.files[0];
                 if (file) {
@@ -290,9 +152,7 @@
             // --- 3. Interactive Calculator Logic ---
             const calculateBtn = document.getElementById('calculate-btn');
             const outputDiv = document.getElementById('calculation-steps');
-
             calculateBtn.addEventListener('click', () => {
-                // Get all input values
                 const f_x = document.getElementById('func-f').value;
                 const u2_t = document.getElementById('func-u2').value;
                 const u2_prime_t = document.getElementById('func-u2-prime').value;
@@ -303,53 +163,35 @@
                     outputDiv.innerHTML = '<p class="text-red-500">Vui lòng điền đầy đủ tất cả các trường.</p>';
                     return;
                 }
-
-                // Helper to generate LaTeX for a function
-                const tex = (str) => `\\(${str.replace(/\*/g, ' \\cdot ')}\\)`;
+                
                 const displayTex = (str) => `$$${str.replace(/\*/g, ' \\cdot ')}$$`;
-
-                // Substitute 'x' with the function expression
                 const f_u2 = f_x.replace(/x/g, `(${u2_t})`);
                 const f_u1 = f_x.replace(/x/g, `(${u1_t})`);
                 
-                let html = '';
-
-                html += `<div class="step">`;
-                html += `<h4 class="font-semibold">1. Công thức áp dụng:</h4>`;
-                html += displayTex(`Y'(t) = f(u_2(t)) \\cdot u'_2(t) - f(u_1(t)) \\cdot u'_1(t)`);
-                html += `</div>`;
-                
-                html += `<div class="step">`;
-                html += `<h4 class="font-semibold">2. Thay thế thành phần vế thứ nhất: $f(u_2(t)) \\cdot u'_2(t)$</h4>`;
-                html += `<p class="ml-4">Thay $x$ trong $f(x)$ bằng $u_2(t) = ${u2_t}$:</p>`;
-                html += `<p class="ml-8">$f(u_2(t)) = ${f_u2}$</p>`;
-                html += `<p class="ml-4">Nhân với $u'_2(t) = ${u2_prime_t}$:</p>`;
-                html += `<p class="ml-8 text-green-700 font-medium">$\\left( ${f_u2} \\right) \\cdot \\left( ${u2_prime_t} \\right)$</p>`
-                html += `</div>`;
-                
-                html += `<div class="step">`;
-                html += `<h4 class="font-semibold">3. Thay thế thành phần vế thứ hai: $f(u_1(t)) \\cdot u'_1(t)$</h4>`;
-                html += `<p class="ml-4">Thay $x$ trong $f(x)$ bằng $u_1(t) = ${u1_t}$:</p>`;
-                html += `<p class="ml-8">$f(u_1(t)) = ${f_u1}$</p>`;
-                html += `<p class="ml-4">Nhân với $u'_1(t) = ${u1_prime_t}$:</p>`;
-                html += `<p class="ml-8 text-red-700 font-medium">$\\left( ${f_u1} \\right) \\cdot \\left( ${u1_prime_t} \\right)$</p>`
-                html += `</div>`;
-                
-                html += `<div class="step border-t mt-4 pt-4">`;
-                html += `<h4 class="font-semibold">4. Kết quả cuối cùng: $Y'(t)$</h4>`;
-                const finalExpression = `\\left( ${f_u2} \\right) \\cdot \\left( ${u2_prime_t} \\right) - \\left( ${f_u1} \\right) \\cdot \\left( ${u1_prime_t} \\right)`;
-                html += displayTex(finalExpression);
-                html += `</div>`;
+                let html = `
+                    <div class="step"><h4 class="font-semibold">1. Công thức áp dụng:</h4>
+                        ${displayTex(`Y'(t) = f(u_2(t)) \\cdot u'_2(t) - f(u_1(t)) \\cdot u'_1(t)`)}
+                    </div>
+                    <div class="step"><h4 class="font-semibold">2. Tính vế thứ nhất: $f(u_2(t)) \\cdot u'_2(t)$</h4>
+                        <p class="ml-4">Thay $x$ bằng $u_2(t) = ${u2_t}$, ta có $f(u_2(t)) = ${f_u2}$</p>
+                        <p class="ml-4 text-green-700 font-medium">$\\Rightarrow \\left( ${f_u2} \\right) \\cdot \\left( ${u2_prime_t} \\right)$</p>
+                    </div>
+                    <div class="step"><h4 class="font-semibold">3. Tính vế thứ hai: $f(u_1(t)) \\cdot u'_1(t)$</h4>
+                         <p class="ml-4">Thay $x$ bằng $u_1(t) = ${u1_t}$, ta có $f(u_1(t)) = ${f_u1}$</p>
+                        <p class="ml-4 text-red-700 font-medium">$\\Rightarrow \\left( ${f_u1} \\right) \\cdot \\left( ${u1_prime_t} \\right)$</p>
+                    </div>
+                    <div class="step border-t mt-4 pt-4"><h4 class="font-semibold">4. Kết quả cuối cùng: $Y'(t)$</h4>
+                        ${displayTex(`\\left( ${f_u2} \\right) \\cdot \\left( ${u2_prime_t} \\right) - \\left( ${f_u1} \\right) \\cdot \\left( ${u1_prime_t} \\right)`)}
+                    </div>`;
                 
                 outputDiv.innerHTML = html;
 
-                // Rerender MathJax for the new content
                 if (window.MathJax) {
                     MathJax.typesetPromise([outputDiv]).catch((err) => console.log('MathJax typeset failed: ', err));
                 }
             });
 
-            // Trigger initial calculation with default values
+            // Trigger initial calculation with default values on page load
             calculateBtn.click();
         });
     </script>
