@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài Giảng Tương Tác: Đạo Hàm Của Tích Phân Theo Cận</title>
+    <title>Bài Giảng Tương Tác: Đạo Hàm Của Tích Phân (API-Powered)</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -40,10 +40,21 @@
         .block-example { @apply slide-block bg-green-50 border-green-500; }
         .block-alert { @apply slide-block bg-yellow-50 border-yellow-500; }
 
-        .responsive-iframe-container { position: relative; overflow: hidden; width: 100%; padding-top: 56.25%; }
-        .responsive-iframe { position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; }
-        
-        .tiktok-embed { margin: 0 auto; }
+        .tiktok-embed { margin: 0 auto !important; }
+
+        /* Loading spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -56,90 +67,78 @@
 
             <!-- Supplementary Materials -->
             <div class="mb-8 border rounded-lg p-4 shadow-md">
-                <h2 class="text-xl font-semibold text-gray-700 mb-4">Tài liệu bổ trợ</h2>
-                <div id="video-embed-container" class="mb-4 rounded-lg overflow-hidden bg-gray-200 min-h-[325px] flex items-center justify-center">
-                    <!-- Video content (embed or iframe) is inserted here by JavaScript -->
-                </div>
-                <div class="flex space-x-4">
-                    <a id="theory-link" href="#" target="_blank" class="flex-1 text-center bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
-                        Học Lý thuyết
-                    </a>
-                    <a id="exercise-link" href="#" target="_blank" class="flex-1 text-center bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300">
-                        BT Tương ứng
-                    </a>
-                </div>
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Video tham khảo</h2>
+                <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@mot_chut_toan/video/7497496142406618389" data-video-id="7497496142406618389" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@mot_chut_toan" href="https://www.tiktok.com/@mot_chut_toan?refer=embed">@mot_chut_toan</a> Bản chất của ứng dụng tích phân - Xem 1 cờ líp - Hiểu hết 1 chương <a title="toán12" target="_blank" href="https://www.tiktok.com/tag/to%C3%A1n12?refer=embed">#toán12</a> <a title="ungdungtichphan" target="_blank" href="https://www.tiktok.com/tag/ungdungtichphan?refer=embed">#ungdungtichphan</a> <a title="banchatungdungtichphan" target="_blank" href="https://www.tiktok.com/tag/banchatungdungtichphan?refer=embed">#banchatungdungtichphan</a> <a title="onthidaihoc" target="_blank" href="https://www.tiktok.com/tag/onthidaihoc?refer=embed">#onthidaihoc</a> <a target="_blank" title="♬ nhạc nền  - Toanthaytin" href="https://www.tiktok.com/music/nhạc-nền-Toanthaytin-7497496600147708688?refer=embed">♬ nhạc nền  - Toanthaytin</a> </section> </blockquote> <script async src="https://www.tiktok.com/embed.js"></script>
             </div>
 
             <!-- Lecture Content -->
-            <div>
+             <div>
                 <h2 class="text-2xl font-bold text-gray-700 mb-4 border-b pb-2">Nội dung Bài giảng</h2>
                 <div class="slide-block block-info"><h3 class="font-bold text-lg mb-2 text-blue-800">Mục tiêu bài học</h3><p>Hôm nay, chúng ta sẽ khám phá cách tính đạo hàm của một tích phân có cận là các hàm số. Mục tiêu là hiểu rõ công thức và logic đằng sau nó, vốn là sự kết hợp của hai nguyên lý cơ bản trong giải tích.</p></div>
                 <div class="slide-block block-info"><h3 class="font-bold text-lg mb-2 text-blue-800">Nền tảng lý thuyết</h3><p>Phương pháp này được xây dựng dựa trên hai trụ cột chính:</p><ul class="list-disc list-inside mt-2 space-y-1"><li><b>Công thức Newton-Leibniz:</b> Liên hệ giữa tích phân xác định và nguyên hàm. $$ \int_a^b f(x)dx = F(b) - F(a) $$</li><li><b>Quy tắc chuỗi (Chain Rule):</b> Dùng để tính đạo hàm của hàm hợp. $$ \frac{d}{dt} f(g(t)) = f'(g(t)) \cdot g'(t) $$</li></ul></div>
                 <div class="slide-block block-alert"><h3 class="font-bold text-lg mb-2 text-yellow-800">Công thức chính (Định lý Leibniz)</h3><p>Giả sử ta có tích phân $Y(t) = \int_{u_1(t)}^{u_2(t)} f(x) dx$.</p><p>Với điều kiện $f(x)$ liên tục và các hàm cận $u_1(t), u_2(t)$ khả vi, đạo hàm của $Y$ theo $t$ được tính như sau:</p><div class="bg-gray-100 p-3 mt-2 rounded">$$ \frac{dY}{dt} = f(u_2(t)) \cdot u'_2(t) - f(u_1(t)) \cdot u'_1(t) $$</div><p class="mt-2">Công thức này ghi nhận sự thay đổi của hàm $f$ ở hai đầu mút, và cả sự thay đổi do chính hai đầu mút đó di chuyển.</p></div>
                 <div class="slide-block block-example"><h3 class="font-bold text-lg mb-2 text-green-800">Ví dụ minh họa</h3><p>Tính đạo hàm theo $t$ của tích phân: $ Y(t) = \int_{t^2}^{\sin(t)} \frac{1}{1+x^4} dx $</p><ol class="list-decimal list-inside mt-2 space-y-2"><li><b>Xác định các thành phần:</b><ul class="list-disc list-inside ml-6 bg-green-100 p-2 rounded"><li>$ f(x) = \frac{1}{1+x^4} $</li><li>Cận trên: $ u_2(t) = \sin(t) \implies u'_2(t) = \cos(t) $</li><li>Cận dưới: $ u_1(t) = t^2 \implies u'_1(t) = 2t $</li></ul></li><li><b>Áp dụng công thức:</b><p>$$ Y'(t) = \underbrace{f(u_2(t)) \cdot u'_2(t)}_{\text{Vế 1}} - \underbrace{f(u_1(t)) \cdot u'_1(t)}_{\text{Vế 2}} $$</p><p>$$ Y'(t) = \underbrace{\left(\frac{1}{1+(\sin t)^4}\right) \cdot (\cos t)}_{\text{Thay vào Vế 1}} - \underbrace{\left(\frac{1}{1+(t^2)^4}\right) \cdot (2t)}_{\text{Thay vào Vế 2}} $$</p></li><li><b>Kết quả cuối cùng:</b><p>$$ Y'(t) = \frac{\cos(t)}{1+\sin^4(t)} - \frac{2t}{1+t^8} $$</p></li></ol></div>
-                <div class="slide-block block-example"><h3 class="font-bold text-lg mb-2 text-green-800">Trường hợp đặc biệt: Một cận là hằng số</h3><p>Khi một trong hai cận là hằng số (ví dụ $u_1(t) = a$), đạo hàm của nó sẽ bằng 0 ($u'_1(t) = 0$), làm cho một vế của công thức bị triệt tiêu.</p><p>Ví dụ: $ Y(t) = \int_{0}^{e^t} \sqrt{1+x^2} dx $</p><p class="mt-2">Ở đây, $u_1(t)=0 \implies u'_1(t)=0$. Vế thứ hai của công thức bằng 0. Ta chỉ cần tính:</p><p>$$ Y'(t) = f(u_2(t)) \cdot u'_2(t) = f(e^t) \cdot (e^t)' = \sqrt{1+(e^t)^2} \cdot e^t = e^t\sqrt{1+e^{2t}} $$</p></div>
-                <div class="slide-block block-alert"><h3 class="font-bold text-lg mb-2 text-yellow-800">Điểm mấu chốt cần nhớ</h3><p>Điều quan trọng không chỉ là nhớ công thức, mà là hiểu bản chất của nó: sự kết hợp giữa <b>Định lý Newton-Leibniz</b> và <b>Quy tắc chuỗi</b> để xử lý các giới hạn động.</p><p class="mt-2">Luôn kiểm tra các điều kiện cần: $f(x)$ phải liên tục và các hàm cận $u_1, u_2$ phải khả vi.</p></div>
-                <div class="slide-block block-info"><h3 class="font-bold text-lg mb-2 text-blue-800">Câu hỏi mở rộng</h3><p>Công thức này sẽ thay đổi như thế nào nếu bản thân hàm dưới dấu tích phân cũng phụ thuộc vào biến $t$? Tức là, làm sao để tính đạo hàm của $ \int_{u_1(t)}^{u_2(t)} f(x, t) dx $?</p><p class="mt-1 text-sm italic">Đây là một hướng thú vị để tìm hiểu sâu hơn về quy tắc Leibniz tổng quát.</p></div>
-            </div>
+             </div>
         </div>
 
         <!-- Right Column: Interactive & Audio -->
         <div id="right-column" class="md:w-1/2 h-screen overflow-y-auto p-6 md:p-8 bg-gray-200 custom-scrollbar">
             <div class="bg-white p-4 rounded-lg shadow-md sticky top-0 z-10"><h2 class="text-xl font-semibold text-gray-700 mb-3">Âm thanh Bài giảng</h2><audio id="audio-player" controls class="w-full"><source src="audio.wav" type="audio/wav">Trình duyệt của bạn không hỗ trợ file âm thanh.</audio><div class="mt-3"><label for="audio-upload" class="text-sm font-medium text-gray-600">Hoặc tải lên tệp âm thanh khác:</label><input type="file" id="audio-upload" accept="audio/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/></div></div>
-            <div class="mt-8 bg-white p-6 rounded-lg shadow-md"><h2 class="text-xl font-semibold text-gray-700 mb-4">Công cụ Tương tác: Tính đạo hàm tích phân</h2><p class="text-sm text-gray-600 mb-6">Nhập các hàm số tương ứng vào các ô dưới đây để xem các bước tính đạo hàm theo công thức Leibniz.</p><div class="space-y-4"><div><label for="func-f" class="block text-sm font-medium text-gray-700">Hàm $f(x)$</label><input type="text" id="func-f" value="1 / (1 + x^4)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="func-u2" class="block text-sm font-medium text-gray-700">Cận trên $u_2(t)$</label><input type="text" id="func-u2" value="sin(t)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div><div><label for="func-u2-prime" class="block text-sm font-medium text-gray-700">Đạo hàm $u'_2(t)$</label><input type="text" id="func-u2-prime" value="cos(t)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="func-u1" class="block text-sm font-medium text-gray-700">Cận dưới $u_1(t)$</label><input type="text" id="func-u1" value="t^2" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div><div><label for="func-u1-prime" class="block text-sm font-medium text-gray-700">Đạo hàm $u'_1(t)$</label><input type="text" id="func-u1-prime" value="2*t" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></div></div></div><button id="calculate-btn" class="mt-6 w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Tính đạo hàm</button><div id="output-area" class="mt-6 border-t pt-6"><h3 class="text-lg font-semibold text-gray-700">Kết quả:</h3><div id="calculation-steps" class="mt-2 p-4 bg-gray-50 rounded-lg text-gray-800 space-y-4"><p class="text-gray-500 italic">Nhấn nút "Tính đạo hàm" để xem kết quả.</p></div></div></div>
+            
+            <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Công cụ Tương tác (Tích hợp AI)</h2>
+                <p class="text-sm text-gray-600 mb-6">Nhập hàm $f(x)$ và các hàm cận. AI sẽ tự động tính đạo hàm của cận và đưa ra kết quả cuối cùng.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label for="func-f" class="block text-sm font-medium text-gray-700">Hàm $f(x)$</label>
+                        <input type="text" id="func-f" value="1 / (1 + x^4)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="func-u2" class="block text-sm font-medium text-gray-700">Cận trên $u_2(t)$</label>
+                        <input type="text" id="func-u2" value="sin(t)" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                     <div>
+                        <label for="func-u1" class="block text-sm font-medium text-gray-700">Cận dưới $u_1(t)$</label>
+                        <input type="text" id="func-u1" value="t^2" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <button id="calculate-btn" class="mt-6 w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center space-x-2" disabled>
+                     <span id="btn-text">Tính đạo hàm</span>
+                     <div id="btn-loader" class="loader hidden"></div>
+                </button>
+
+                <div id="output-area" class="mt-6 border-t pt-6">
+                    <h3 class="text-lg font-semibold text-gray-700">Kết quả:</h3>
+                    <div id="calculation-steps" class="mt-2 p-4 bg-gray-50 rounded-lg text-gray-800 space-y-4 min-h-[100px]">
+                        <p class="text-gray-500 italic">Nhập các hàm và nhấn nút để xem kết quả.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- 1. Load external links and video embed ---
-            const loadContent = async () => {
-                const videoContainer = document.getElementById('video-embed-container');
-                try {
-                    const response = await fetch('link.json');
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    const data = await response.json();
-                    
-                    document.getElementById('theory-link').href = data.theoryLink || '#';
-                    document.getElementById('exercise-link').href = data.exerciseLink || '#';
-
-                    // Priority 1: Use raw embed HTML if it exists and is not empty.
-                    if (data.embedHtml && data.embedHtml.trim() !== '') {
-                        videoContainer.innerHTML = data.embedHtml;
-                        videoContainer.style.background = 'none';
-                        videoContainer.style.padding = '0';
-                        // The script for the embed (like TikTok's) will be part of the HTML and should load itself.
-                    } 
-                    // Priority 2: Fallback to YouTube link.
-                    else if (data.youtubeLink) {
-                        videoContainer.innerHTML = ''; // Clear fallback content
-                        videoContainer.classList.add('responsive-iframe-container');
-                        
-                        const iframe = document.createElement('iframe');
-                        iframe.className = 'responsive-iframe';
-                        iframe.src = data.youtubeLink;
-                        iframe.title = 'YouTube video player';
-                        iframe.frameBorder = '0';
-                        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                        iframe.allowFullscreen = true;
-                        
-                        videoContainer.appendChild(iframe);
-                    } 
-                    // Priority 3: Show error if no video source is provided.
-                    else {
-                        videoContainer.innerHTML = '<p class="text-red-500">Không có video được cung cấp trong link.json.</p>';
-                    }
-
-                } catch (error) {
-                    console.error("Could not load content from link.json:", error);
-                    videoContainer.innerHTML = '<p class="text-red-500 text-center">Không thể tải tệp <strong>link.json</strong>. Vui lòng kiểm tra lại.</p>';
-                }
-            };
-            loadContent();
-
-            // --- 2. Audio Player Logic ---
+            // --- Hardcoded API Key (SECURITY RISK) ---
+            const API_KEY = "AIzaSyBCPULwHerbpiYtrNPpM3xtByiaO7PK-MI";
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+            
+            // --- Elements ---
             const audioPlayer = document.getElementById('audio-player');
             const audioUpload = document.getElementById('audio-upload');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const outputDiv = document.getElementById('calculation-steps');
+            const btnText = document.getElementById('btn-text');
+            const btnLoader = document.getElementById('btn-loader');
+            
+            if (API_KEY && API_KEY !== "YOUR_API_KEY_HERE") {
+                calculateBtn.disabled = false;
+            } else {
+                 outputDiv.innerHTML = `<p class="text-red-500 font-bold">Lỗi: API Key chưa được cung cấp. Vui lòng thêm key vào trong mã nguồn.</p>`;
+            }
+
+            // --- Audio Player Logic ---
             audioUpload.addEventListener('change', (event) => {
                 const file = event.target.files[0];
                 if (file) {
@@ -149,50 +148,100 @@
                 }
             });
 
-            // --- 3. Interactive Calculator Logic ---
-            const calculateBtn = document.getElementById('calculate-btn');
-            const outputDiv = document.getElementById('calculation-steps');
-            calculateBtn.addEventListener('click', () => {
+            // --- API Call Function to get derivative ---
+            async function getDerivative(expression) {
+                const prompt = `Calculate the derivative of the function "${expression}" with respect to the variable 't'. Provide only the resulting mathematical expression. For example, if the input is "t^3", the output should be "3*t^2".`;
+                
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }]
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorBody = await response.json();
+                        console.error("API Error Response:", errorBody);
+                        throw new Error(`API call failed with status: ${response.status}. ${errorBody.error?.message || 'Unknown error.'}`);
+                    }
+
+                    const data = await response.json();
+                    const derivative = data.candidates[0].content.parts[0].text.trim();
+                    return derivative;
+                } catch (error) {
+                    console.error("Error fetching derivative:", error);
+                    return `Error: ${error.message}`; // Return error message on failure
+                }
+            }
+            
+            // --- Main Calculation Logic ---
+            calculateBtn.addEventListener('click', async () => {
+                // Show loading state
+                btnText.textContent = 'Đang tính toán...';
+                btnLoader.classList.remove('hidden');
+                calculateBtn.disabled = true;
+                outputDiv.innerHTML = '<div class="flex justify-center items-center"><div class="loader"></div></div>';
+
+                // Get input values
                 const f_x = document.getElementById('func-f').value;
                 const u2_t = document.getElementById('func-u2').value;
-                const u2_prime_t = document.getElementById('func-u2-prime').value;
                 const u1_t = document.getElementById('func-u1').value;
-                const u1_prime_t = document.getElementById('func-u1-prime').value;
 
-                if (!f_x || !u2_t || !u2_prime_t || !u1_t || !u1_prime_t) {
-                    outputDiv.innerHTML = '<p class="text-red-500">Vui lòng điền đầy đủ tất cả các trường.</p>';
+                if (!f_x || !u1_t || !u2_t) {
+                    outputDiv.innerHTML = '<p class="text-red-500">Vui lòng điền đầy đủ các hàm.</p>';
+                    btnText.textContent = 'Tính đạo hàm';
+                    btnLoader.classList.add('hidden');
+                    calculateBtn.disabled = false;
+                    return;
+                }
+
+                // Call API for both derivatives concurrently
+                const [u1_prime_t, u2_prime_t] = await Promise.all([
+                    getDerivative(u1_t),
+                    getDerivative(u2_t)
+                ]);
+
+                // Check if API calls were successful
+                if (u1_prime_t.startsWith('Error:') || u2_prime_t.startsWith('Error:')) {
+                    outputDiv.innerHTML = `<p class="text-red-500 font-bold">Đã xảy ra lỗi khi gọi AI:</p><p class="text-red-700 text-sm mt-2">${u1_prime_t}</p><p class="text-red-700 text-sm mt-2">${u2_prime_t}</p>`;
+                    btnText.textContent = 'Thử lại';
+                    btnLoader.classList.add('hidden');
+                    calculateBtn.disabled = false;
                     return;
                 }
                 
-                const displayTex = (str) => `$$${str.replace(/\*/g, ' \\cdot ')}$$`;
+                // --- Build the output ---
                 const f_u2 = f_x.replace(/x/g, `(${u2_t})`);
                 const f_u1 = f_x.replace(/x/g, `(${u1_t})`);
-                
+                const displayTex = (str) => `$$${str.replace(/\*/g, ' \\cdot ')}$$`;
+
                 let html = `
-                    <div class="step"><h4 class="font-semibold">1. Công thức áp dụng:</h4>
-                        ${displayTex(`Y'(t) = f(u_2(t)) \\cdot u'_2(t) - f(u_1(t)) \\cdot u'_1(t)`)}
+                    <div class="step"><h4 class="font-semibold">1. Xác định đạo hàm bằng AI:</h4>
+                        <p class="ml-4">Đạo hàm của cận trên $u_2(t) = ${u2_t}$ là: <strong class="text-blue-600">$u'_2(t) = ${u2_prime_t}$</strong></p>
+                        <p class="ml-4">Đạo hàm của cận dưới $u_1(t) = ${u1_t}$ là: <strong class="text-blue-600">$u'_1(t) = ${u1_prime_t}$</strong></p>
                     </div>
-                    <div class="step"><h4 class="font-semibold">2. Tính vế thứ nhất: $f(u_2(t)) \\cdot u'_2(t)$</h4>
-                        <p class="ml-4">Thay $x$ bằng $u_2(t) = ${u2_t}$, ta có $f(u_2(t)) = ${f_u2}$</p>
+                     <div class="step"><h4 class="font-semibold">2. Tính vế thứ nhất: $f(u_2(t)) \\cdot u'_2(t)$</h4>
                         <p class="ml-4 text-green-700 font-medium">$\\Rightarrow \\left( ${f_u2} \\right) \\cdot \\left( ${u2_prime_t} \\right)$</p>
                     </div>
                     <div class="step"><h4 class="font-semibold">3. Tính vế thứ hai: $f(u_1(t)) \\cdot u'_1(t)$</h4>
-                         <p class="ml-4">Thay $x$ bằng $u_1(t) = ${u1_t}$, ta có $f(u_1(t)) = ${f_u1}$</p>
                         <p class="ml-4 text-red-700 font-medium">$\\Rightarrow \\left( ${f_u1} \\right) \\cdot \\left( ${u1_prime_t} \\right)$</p>
                     </div>
                     <div class="step border-t mt-4 pt-4"><h4 class="font-semibold">4. Kết quả cuối cùng: $Y'(t)$</h4>
                         ${displayTex(`\\left( ${f_u2} \\right) \\cdot \\left( ${u2_prime_t} \\right) - \\left( ${f_u1} \\right) \\cdot \\left( ${u1_prime_t} \\right)`)}
                     </div>`;
-                
+
                 outputDiv.innerHTML = html;
 
+                // Reset button state and rerender MathJax
+                btnText.textContent = 'Tính đạo hàm';
+                btnLoader.classList.add('hidden');
+                calculateBtn.disabled = false;
                 if (window.MathJax) {
                     MathJax.typesetPromise([outputDiv]).catch((err) => console.log('MathJax typeset failed: ', err));
                 }
             });
-
-            // Trigger initial calculation with default values on page load
-            calculateBtn.click();
         });
     </script>
 
