@@ -122,7 +122,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             // --- Hardcoded API Key (SECURITY RISK) ---
             const API_KEY = "AIzaSyBCPULwHerbpiYtrNPpM3xtByiaO7PK-MI";
-            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+
+            // --- CORRECTED API URL ---
+            // Using a newer, supported model: gemini-1.5-flash-latest
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
             
             // --- Elements ---
             const audioPlayer = document.getElementById('audio-player');
@@ -132,7 +135,8 @@
             const btnText = document.getElementById('btn-text');
             const btnLoader = document.getElementById('btn-loader');
             
-            if (API_KEY && API_KEY !== "YOUR_API_KEY_HERE") {
+            // Enable button if API key is present
+            if (API_KEY && !API_KEY.includes("YOUR_API_KEY")) {
                 calculateBtn.disabled = false;
             } else {
                  outputDiv.innerHTML = `<p class="text-red-500 font-bold">Lỗi: API Key chưa được cung cấp. Vui lòng thêm key vào trong mã nguồn.</p>`;
@@ -150,7 +154,7 @@
 
             // --- API Call Function to get derivative ---
             async function getDerivative(expression) {
-                const prompt = `Calculate the derivative of the function "${expression}" with respect to the variable 't'. Provide only the resulting mathematical expression. For example, if the input is "t^3", the output should be "3*t^2".`;
+                const prompt = `Calculate the derivative of the function "${expression}" with respect to the variable 't'. Provide only the resulting mathematical expression in plain text. For example, if the input is "t^3", the output must be "3*t^2". Do not add any extra text or formatting.`;
                 
                 try {
                     const response = await fetch(API_URL, {
@@ -168,8 +172,12 @@
                     }
 
                     const data = await response.json();
-                    const derivative = data.candidates[0].content.parts[0].text.trim();
-                    return derivative;
+                    if (data.candidates && data.candidates.length > 0) {
+                        const derivative = data.candidates[0].content.parts[0].text.trim();
+                        return derivative;
+                    } else {
+                        throw new Error("API returned no valid candidates in the response.");
+                    }
                 } catch (error) {
                     console.error("Error fetching derivative:", error);
                     return `Error: ${error.message}`; // Return error message on failure
